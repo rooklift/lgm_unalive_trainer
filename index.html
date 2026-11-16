@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LGM Unalive Trainer</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main>
+	<section id="game_side">
+		<canvas id="game" width="240" height="240"></canvas>
+		<p id="message">Loading…</p>
+		<dl id="stats">
+			<div><dt>Kills</dt><dd id="stat_kills">0</dd></div>
+			<div><dt>Shots</dt><dd id="stat_shots">0</dd></div>
+			<div><dt>Shots per kill</dt><dd id="stat_ratio">–</dd></div>
+			<div><dt>Got away</dt><dd id="stat_escaped">0</dd></div>
+			<div><dt>Range</dt><dd id="stat_range">7</dd></div>
+		</dl>
+	</section>
+
+	<section id="panel">
+		<h1>LGM Unalive Trainer</h1>
+
+		<h2>Keys</h2>
+		<p class="hint">Click a box, then press the key for it. Esc cancels.</p>
+		<div id="keys"></div>
+		<button type="button" id="reset_keys">Default keys</button>
+
+		<h2>Options</h2>
+		<label class="option" id="map_option" hidden>
+			<span>Map</span>
+			<select id="map"></select>
+		</label>
+		<label class="option">
+			<span>Window size</span>
+			<select id="zoom">
+				<option value="1">1× (240 × 240, as classic Bolo)</option>
+				<option value="2">2×</option>
+				<option value="3">3×</option>
+				<option value="4">4×</option>
+			</select>
+		</label>
+		<label class="option">
+			<span>Animation smoothness</span>
+			<select id="smoothness">
+				<option value="0">Classic</option>
+				<option value="1">Match pixelation</option>
+				<option value="2">Smooth</option>
+			</select>
+		</label>
+		<label class="option">
+			<span>Men at once</span>
+			<select id="lgm_count">
+				<option>1</option><option>2</option><option>3</option><option>4</option>
+				<option>5</option><option>6</option><option>7</option><option>8</option>
+			</select>
+		</label>
+		<label class="option check">
+			<input type="checkbox" id="show_gunsight">
+			<span>Show gunsight</span>
+		</label>
+		<label class="option check">
+			<input type="checkbox" id="sound">
+			<span>Sound</span>
+		</label>
+		<button type="button" id="reset_stats">Reset score</button>
+	</section>
+</main>
+
+<script src="js/maps.js"></script>
+<script src="js/map.js"></script>
+<script src="js/tiles.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/input.js"></script>
+<script src="js/render.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
