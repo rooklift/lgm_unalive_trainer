@@ -33,6 +33,7 @@ Deliberate differences, all from what a trainer is for:
 - Shells and trees: ammunition never runs out, and terrain damaged by shells is restored after one to two seconds. Soft ground hit by a shell fired from a boat is not changed.
 - The men are not builders with a tank to go back to. They appear in a tree, run straight to another, and vanish there.
 - There are no pillboxes, bases, mines or other tanks. Mined squares in a map load as the terrain under the mine.
+- A turn is at its full rate from the first instant. WinBolo starts one at an eighth of the rate for the first 60 ms. This is a trial: set `TANK_TURN_RAMP_STEPS` in `js/sim.js` back to 6 for WinBolo's way.
 - The view scrolls as WinBolo does with auto-scrolling and smooth scrolling both off: a whole square at a time.
 - "Match pixelation" snaps movement to one texel of the sprite art. This page uses WinBolo's classic 16-pixel art, where a texel is a game pixel, so it differs from "Classic" only in rounding to the nearest pixel instead of down.
 

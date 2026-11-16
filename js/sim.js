@@ -30,6 +30,7 @@ const TANK_SLOWKEY_RATE = 0.25;     /* the decelerate key */
 const TANK_MIN_MOVE_SPEED = 6;      /* residual speed needed to move at all */
 const TANK_HIT_RADIUS = 112;        /* the circle that collides with walls */
 const TANK_NUDGE_ITERATIONS = 5;
+const TANK_TURN_RAMP_STEPS = 0;     /* half-steps a turn spends at an eighth of its rate. WinBolo: 6. Off here, on trial */
 const TANK_RELOAD_TIME = 13;        /* game ticks between shots */
 const TANK_DEATH_WAIT = 255;        /* game ticks before the respawn */
 const TANK_WATER_TIME = 15;         /* game ticks per "glug" when wading */
@@ -285,15 +286,16 @@ class Game {
 		return TERRAIN.get(t).turn;
 	}
 
-	/* tankTurn: runs on every half-step. A turn starts at an eighth of
-	 * the terrain's rate and reaches the full rate after six half-steps
-	 * of the key being held. */
+	/* tankTurn: runs on every half-step. In WinBolo a turn starts at an
+	 * eighth of the terrain's rate and reaches the full rate after six
+	 * half-steps of the key being held; with TANK_TURN_RAMP_STEPS at 0
+	 * it is at the full rate from the first. */
 	tank_turn(input) {
 		let tank = this.tank;
 		let rate = this.tank_turn_rate(tank.x >> 8, tank.y >> 8);
 		if (input.left) {
 			let amount = rate;
-			if (tank.first_left < 6) {
+			if (tank.first_left < TANK_TURN_RAMP_STEPS) {
 				tank.first_left++;
 				amount /= 8;
 				if (tank.first_left === 1) amount = this.tank_visible_turn(amount, true);
@@ -305,7 +307,7 @@ class Game {
 		}
 		if (input.right) {
 			let amount = rate;
-			if (tank.first_right < 6) {
+			if (tank.first_right < TANK_TURN_RAMP_STEPS) {
 				tank.first_right++;
 				amount /= 8;
 				if (tank.first_right === 1) amount = this.tank_visible_turn(amount, false);

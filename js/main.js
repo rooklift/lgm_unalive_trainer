@@ -38,7 +38,7 @@ let scale = 1; /* canvas pixels per game pixel */
 
 /* ------------------------------------------------------------- options */
 
-let options = { map: 0, zoom: 2, smoothness: ANIM_SMOOTH, lgm_count: 2, show_gunsight: true, sound: true };
+let options = { map: 0, zoom: 2, smoothness: ANIM_SMOOTH, lgm_count: 2, sound: true };
 
 function load_options() {
 	try {
@@ -100,7 +100,6 @@ function wire_options() {
 	number_option("lgm_count", "lgm_count", () => {
 		if (game) game.lgm_count = options.lgm_count;
 	});
-	check_option("show_gunsight", "show_gunsight");
 	check_option("sound", "sound");
 
 	$("reset_keys").addEventListener("click", e => {

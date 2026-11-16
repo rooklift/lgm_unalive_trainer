@@ -69,7 +69,7 @@ function position(mode, w) {
 }
 
 /* Draws one frame. scale is canvas pixels per game pixel. options is
- * { smoothness, show_gunsight }. */
+ * { smoothness }. */
 function draw(ctx, game, scale, options) {
 	let mode = options.smoothness;
 	let view = game.view;
@@ -131,7 +131,7 @@ function draw(ctx, game, scale, options) {
 
 	/* The crosshair is 17 pixels square so that its middle pixel is the
 	 * one a shell bursts on. Always on whole game pixels. */
-	if (options.show_gunsight && !tank.destroyed) {
+	if (!tank.destroyed) {
 		let [gx, gy] = game.gunsight();
 		put("crosshair", ((gx - TANK_SUBTRACT) & 0xffff) >> 4, ((gy - TANK_SUBTRACT) & 0xffff) >> 4);
 	}
