@@ -82,7 +82,7 @@ const TURN_BOAT = 1;
 
 /* ------------------------------------------------- trainer's own rules */
 
-const REGROW_MIN_TICKS = 50;        /* shot terrain comes back in 1 to 2 seconds */
+const REGROW_MIN_TICKS = 50;        /* a shot tree comes back in 1 to 2 seconds */
 const REGROW_MAX_TICKS = 100;
 const LGM_MIN_RUN = 8;              /* squares between where a man starts and ends */
 const LGM_MIN_OPEN = 3 * 256;       /* WORLD units of his run that must be out of the trees */
@@ -161,7 +161,7 @@ class Game {
 		this.explosion_clock = 0;
 		this.lgms = [];
 		this.lgm_spawn_timers = []; /* game ticks until each missing man appears */
-		this.regrow = [];           /* { x, y, ticks }: squares on their way back */
+		this.regrow = [];           /* { x, y, ticks }: shot trees on their way back */
 		this.sounds = [];           /* names of sounds for the caller to play and clear */
 		this.stats = { shots: 0, kills: 0, escaped: 0, deaths: 0 };
 
@@ -598,14 +598,19 @@ class Game {
 	}
 
 	/* What a shell does to the square that stopped it (the terrain switch
-	 * in shellsCalcCollision). In the trainer every change but a sunk boat
-	 * is undone a second or two later. Soft ground hit from a boat is left
-	 * as it was: in WinBolo it takes several hits to change. */
+	 * in shellsCalcCollision), by the trainer's rules. A tree is shot down
+	 * to grass and is back a second or two later. A building becomes a
+	 * shot building for good, and a shot building takes any number of
+	 * hits without changing: in WinBolo it would wear down to rubble,
+	 * which men and tanks can cross, and the map would come apart. A boat
+	 * sinks. Soft ground hit from a boat is left as it was: in WinBolo it
+	 * takes several hits to change. */
 	shell_damage(mx, my) {
 		let i = my * MAP_SIZE + mx;
 		switch (this.grid[i]) {
 			case FOREST:
 				this.grid[i] = GRASS;
+				this.regrow.push({ x: mx, y: my, ticks: rand_int(REGROW_MIN_TICKS, REGROW_MAX_TICKS) });
 				this.sound_at("shot_tree", mx, my);
 				break;
 			case BUILDING:
@@ -613,19 +618,13 @@ class Game {
 				this.sound_at("shot_building", mx, my);
 				break;
 			case HALFBUILDING:
-				this.grid[i] = RUBBLE;
 				this.sound_at("shot_building", mx, my);
 				break;
 			case BOAT:
 				this.grid[i] = RIVER;
 				this.sound_at("shot_building", mx, my);
-				return;
-			default:
-				return;
+				break;
 		}
-		let pending = this.regrow.find(r => r.x === mx && r.y === my);
-		if (pending) pending.ticks = rand_int(REGROW_MIN_TICKS, REGROW_MAX_TICKS);
-		else this.regrow.push({ x: mx, y: my, ticks: rand_int(REGROW_MIN_TICKS, REGROW_MAX_TICKS) });
 	}
 
 	shell_burst(x, y) {

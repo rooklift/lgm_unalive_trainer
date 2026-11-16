@@ -1,0 +1,62 @@
+name: Deploy to GitHub Pages
+
+# Publishes the trainer at https://rooklift.github.io/lgm_unalive_trainer/.
+# Runs on every push to main that touches the page, its art or sounds, or a
+# map, and by hand from the Actions tab.
+#
+# One-off setup: in the repository's Settings > Pages, the source must be
+# set to "GitHub Actions" (not "Deploy from a branch"), or the deploy step
+# fails. The site is served over HTTPS and is public.
+#
+# js/maps.js is written afresh here from the .map files in the commit
+# (embed_maps.py), so the site always has the maps as committed, even when
+# a map was edited and pushed without running the script first.
+#
+# Only what the page loads is uploaded: index.html, style.css and the js/,
+# sprites/ and sounds/ folders.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "style.css"
+      - "js/**"
+      - "sprites/**"
+      - "sounds/**"
+      - "*.map"
+      - "embed_maps.py"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; a newer push cancels one still queued.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Embed the maps
+        run: python3 embed_maps.py
+      - name: Stage the site
+        run: |
+          mkdir site
+          cp index.html style.css site/
+          cp -r js sprites sounds site/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

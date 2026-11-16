@@ -4,14 +4,16 @@ Practice for shooting little green men in Bolo / WinBolo. A web page: one tank, 
 
 ## Running it
 
-Open `index.html` in a browser: double-clicking it is enough. Nothing needs installing or serving, though it works from a web server or GitHub Pages too.
+It is online at <https://rooklift.github.io/lgm_unalive_trainer/>, published from `main` by `.github/workflows/pages.yml` on every push that changes it.
+
+To run a copy from disk, open `index.html` in a browser: double-clicking it is enough. Nothing needs installing or serving.
 
 ## Playing
 
 - Click a key box and press a key to set it. The defaults are WinBolo's: W / S accelerate and decelerate, A / D turn, Space shoots, Num + and Enter lengthen and shorten the gun range, and the arrow keys scroll the view.
 - You start on a boat. A boat only lands at full speed, so keep accelerating into the shore.
 - A man is not hit by a shell flying over him. He dies when a shell bursts within half a square of him: at the end of its range, where the gunsight is, or against the tree he is in.
-- Shot trees grow back in a second or two.
+- Shot trees grow back in a second or two. A building that is shot becomes a shot building and stays one however often it is hit again.
 - Driving into deep sea without a boat sinks the tank. A new one arrives at a start square about five seconds later.
 
 ## Maps
@@ -22,7 +24,7 @@ A page opened from disk cannot read files, so the maps are carried inside `js/ma
 python embed_maps.py
 ```
 
-Run it again after adding, removing or editing a map; until then the page keeps the old copy. `basic.map` is the map the page starts on, and with more than one map the page shows a chooser. Men need forest to run between and ground they can cross in a straight line.
+Run it again after adding, removing or editing a map; until then a copy opened from disk keeps the old one. The published site does not depend on this: the deploy runs the script itself. `basic.map` is the map the page starts on, and with more than one map the page shows a chooser. Men need forest to run between and ground they can cross in a straight line.
 
 ## How faithful it is
 
@@ -30,7 +32,7 @@ The tank, boat, shell and man physics are ported by hand from the WinBolo source
 
 Deliberate differences, all from what a trainer is for:
 
-- Shells and trees: ammunition never runs out, and terrain damaged by shells is restored after one to two seconds. Soft ground hit by a shell fired from a boat is not changed.
+- Shells and terrain: ammunition never runs out. A shot tree is back after one to two seconds. A shot building stays a shot building for good and never wears down to rubble, so walls keep blocking men and tanks. Soft ground hit by a shell fired from a boat is not changed.
 - The men are not builders with a tank to go back to. They appear in a tree, run straight to another, and vanish there.
 - There are no pillboxes, bases, mines or other tanks. Mined squares in a map load as the terrain under the mine.
 - A turn is at its full rate from the first instant. WinBolo starts one at an eighth of the rate for the first 60 ms. This is a trial: set `TANK_TURN_RAMP_STEPS` in `js/sim.js` back to 6 for WinBolo's way.
