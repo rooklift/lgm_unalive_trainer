@@ -14,6 +14,7 @@ The trainer:
 
 * Load the map included (assume future versions might have other maps).
 * Enemy LGMs mysteriously spawn in trees and run to some tree some meaningful distance away; reject any path that makes them travel only through forest.
+* No enemy tanks are actually necessary.
 * Player has infinite ammo (but no mines) with which to practice shooting LGMs.
 * Trees can be shot but grow back within a second or two.
 * The player can only "die" by driving into deep sea; respawn as normal.
