@@ -38,7 +38,7 @@ let scale = 1; /* canvas pixels per game pixel */
 
 /* ------------------------------------------------------------- options */
 
-let options = { map: 0, zoom: 2, smoothness: ANIM_SMOOTH, lgm_count: 2, sound: true };
+let options = { map: 0, zoom: 2, smoothness: ANIM_SMOOTH, lgm_count: 2, auto_slowdown: false, sound: true };
 
 function load_options() {
 	try {
@@ -81,12 +81,13 @@ function wire_options() {
 			el.blur(); /* give the keyboard back to the game */
 		});
 	};
-	let check_option = (id, key) => {
+	let check_option = (id, key, after) => {
 		let el = $(id);
 		el.checked = options[key];
 		el.addEventListener("change", () => {
 			options[key] = el.checked;
 			save_options();
+			if (after) after();
 			el.blur();
 		});
 	};
@@ -99,6 +100,9 @@ function wire_options() {
 	number_option("smoothness", "smoothness");
 	number_option("lgm_count", "lgm_count", () => {
 		if (game) game.lgm_count = options.lgm_count;
+	});
+	check_option("auto_slowdown", "auto_slowdown", () => {
+		if (game) game.auto_slowdown = options.auto_slowdown;
 	});
 	check_option("sound", "sound");
 
@@ -214,6 +218,7 @@ function start_map() {
 	try {
 		let bytes = Uint8Array.from(atob(map.data), c => c.charCodeAt(0));
 		game = new Game(parse_map(bytes), options.lgm_count);
+		game.auto_slowdown = options.auto_slowdown;
 		last_time = null;
 		owed_ms = 0;
 		half_steps = 0;

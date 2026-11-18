@@ -12,6 +12,7 @@ To run a copy from disk, open `index.html` in a browser: double-clicking it is e
 
 - Click a key box and press a key to set it. The defaults are WinBolo's: W / S accelerate and decelerate, A / D turn, Space shoots, Num + and Enter lengthen and shorten the gun range, and the arrow keys scroll the view.
 - You start on a boat. A boat only lands at full speed, so keep accelerating into the shore.
+- "Auto slowdown" is WinBolo's option of that name, off by default: with it on, the tank slows to a stop whenever neither the accelerate nor the decelerate key is held.
 - A man is not hit by a shell flying over him. He dies when a shell bursts within half a square of him: at the end of its range, where the gunsight is, or against the tree he is in.
 - Shot trees grow back in a second or two. A building that is shot becomes a shot building and stays one however often it is hit again.
 - Driving into deep sea without a boat sinks the tank. A new one arrives at a start square about five seconds later.

@@ -27,6 +27,7 @@ const {
 const TANK_ACCEL_RATE = 0.25;       /* speed gained per game tick */
 const TANK_TERRAIN_DECEL_RATE = 0.25; /* drag when above the terrain's cap */
 const TANK_SLOWKEY_RATE = 0.25;     /* the decelerate key */
+const TANK_AUTOSLOW_RATE = 0.25;    /* auto slowdown, when the player has it on */
 const TANK_MIN_MOVE_SPEED = 6;      /* residual speed needed to move at all */
 const TANK_HIT_RADIUS = 112;        /* the circle that collides with walls */
 const TANK_NUDGE_ITERATIONS = 5;
@@ -155,6 +156,7 @@ class Game {
 		this.orig = Uint8Array.from(map.grid); /* terrain as the map had it */
 		this.starts = map.starts;
 		this.lgm_count = lgm_count;
+		this.auto_slowdown = false; /* WinBolo's Auto Slowdown preference; the page sets it */
 
 		this.shells = [];
 		this.explosions = [];
@@ -440,6 +442,12 @@ class Game {
 		this.tank_check_ground_clear(bmx, bmy);
 		this.tank_turn(input);
 		this.tank_accel(input, bmx, bmy);
+
+		/* Auto slowdown: with neither the accelerate nor the decelerate key
+		 * down the tank slows as if braking. Turning alone does not stop it. */
+		if (this.auto_slowdown && tank.speed > 0 && !input.accel && !input.decel) {
+			tank.speed = Math.max(0, tank.speed - TANK_AUTOSLOW_RATE);
+		}
 
 		/* Speed is banked until there is enough of it to move, so a tank at
 		 * speed 3 moves 6 units every other tick. */
